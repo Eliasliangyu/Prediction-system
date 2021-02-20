@@ -1,0 +1,245 @@
+{% block body %}
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">    
+    <meta charset="utf-8">
+		<title>Heart Disease Detector</title>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+        <link rel="icon" href="{{ url_for('static', filename='icon.png') }}" type="image/x-icon"/>
+		<link rel="shortcut icon" type="image/x-icon" href="{{ url_for('static', filename='icon.png') }}" />
+		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">	
+        <script src="https://s3.pstatp.com/cdn/expire-1-M/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://ssl.captcha.qq.com/TCaptcha.js"></script>
+		<script type="text/javascript">
+			function vali(){
+				var valicode = new TencentCaptcha('1302508721', function(res){
+					if(res.ret==0){
+						var form = document.getElementById("form1");
+						form.submit();
+					}
+					else{
+						alert("验证出错！");
+					}
+				});
+				valicode.show();
+			}
+		</script>	
+  </head>
+
+
+  <body>
+		<div class="container-fluid">
+			<div class="py-3 text-center bg-info">
+				<h2 class="top-title"><img src="{{ url_for('static', filename='icon.png') }}" height="60" width="60"> Heart Disease Detector</h2>
+			</div>
+
+			<div class="py-3 row">
+				<div class="col-md-4">
+					<div class="alert alert-info" role="alert">
+						<h5 class="alert-heading"><B>Welcome!</B></h5>
+						<p>The platform can detect heart disease early.
+						Please enter the data in the table, and then click Prediction to find the diagnostic results.</p>
+						<hr>
+						<p class="mb-0"><B>Develpoer:</B><i><a href="https://liangyu.site">&ensp;youliangyu</a></i></p>
+						<hr>
+				<!-- 16:9 aspect ratio -->
+					<div class="embed-responsive embed-responsive-16by9">
+						<iframe class="embed-responsive-item" src="https://1256913445.vod2.myqcloud.com/d48fa54fvodtransgzp1256913445/e96ded485285890780746003425/v.f20.mp4"></iframe>
+					</div>
+					<p>Is there no heart disease if the heart test is "normal"? &ensp;—<a href="https://www.mvyxws.com/index.php/vod/search?key=%E5%BF%83%E8%84%8F%E7%97%85">医学微视</a></p>
+				</div>
+		</div>
+			
+				<div class="col-md-8">
+					<div class="form-group row">
+						<div class="col-md-2">
+							<label>Age *</label>
+						</div>
+						<div class="col-md-4">
+							<div class="input-group">
+								<input type="text" class="form-control" id="age">
+								<div class="input-group-append">
+									<span class="input-group-text">year</span>
+								</div>
+							</div>
+						</div>
+<br>
+<br>
+						<div class="col-md-2">
+							<label>Gender *</label>
+						</div>
+						<div class="col-md-4">
+							<select class="custom-select" id="sex">
+								<option value="" disabled selected>Select ... </option>
+								<option value="1">(1) Man</option>
+								<option value="0">(0) Woman</option>
+							</select>
+						</div>
+					</div>
+
+					<div class="form-group row">
+						<div class="col-md-2">
+							<label><i>Chest-pain type</i></label>
+						</div>
+						<div class="col-md-4">
+							<select class="custom-select" id="chest">
+								<option value="" disabled selected>Select ...</option>
+								<option value="1"><i>(1) Typical angina</i></option>
+								<option value="2"><i>(2) Atypical angina</i></option>
+								<option value="3"><i>(3) Non-anginal pain</i></option>
+								<option value="4"><i>(4) Asymptotic</i></option>
+							</select>
+						</div>
+<br>
+<br>
+						<div class="col-md-2">
+							<label><i>Blood pressures<br></i></label>
+						</div>
+						<div class="col-md-4">
+							<div class="input-group">
+								<input type="text" class="form-control" id="bpressure" placeholder="Range: 60-200">							
+								<div class="input-group-append">
+									<span class="input-group-text">mmHg</span>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="form-group row">
+						<div class="col-md-2">
+							<label><i>Cholesterol</i></label>
+						</div>
+						<div class="col-md-4">
+							<div class="input-group">
+								<input type="text" class="form-control" id="cholesterol" placeholder="Range: 120-600">
+								<div class="input-group-append">
+									<span class="input-group-text">mg/dl</span>
+								</div>
+							</div>
+						</div>
+<br>
+<br>
+						<div class="col-md-2">
+							<label><i>Fasting Blood Sugar</i></label>
+						</div>
+						<div class="col-md-4">
+							<select class="custom-select" id="blood_sugar" required>
+								<option value="" disabled selected>Select ...</option>
+								<option value="1"><i>(1) > 120 mg/dl</i></option>
+								<option value="0"><i>(0) &lt;= 120 mg/dl</i></option>
+							</select>
+						</div>
+					</div>
+
+					<div class="form-group row">
+						<div class="col-md-2">
+							<label><i>Resting ECG</i></label>
+						</div>
+						<div class="col-md-4">
+							<select class="custom-select" id="ecg" required>
+								<option value="" disabled selected>Select ...</option>
+								<option value="0"><i>(0) Normal</i></option>
+								<option value="1"><i>(1) Having ST-T wave abnormality</i></option>
+								<option value="2"><i>(2) Left ventricular hyperthropy</i></option>
+							</select>
+						</div>
+<br>
+<br>
+						<div class="col-md-2">
+							<label><i>Max-heart rate achieved</i></label>
+						</div>
+						<div class="col-md-4">
+							<input class="form-control" id="max_heart" type="text">
+						</div>
+					</div>
+
+					<div class="form-group row">
+						<div class="col-md-2">
+							<label><i>Exercise induced angina</i></label>
+						</div>
+						<div class="col-md-4">
+							<select class="custom-select" id="angina">
+								<option value="" disabled selected>Select ...</option>
+								<option value="1"><i>(1) Yes</i></option>
+								<option value="0"><i>(0) No</i></option>
+							</select>
+						</div>
+<br>
+<br>
+						<div class="col-md-2">
+							<label><i>ST depression</i></label>
+						</div>
+						<div class="col-md-4">
+							<input class="form-control" id="st_depression" type="text">
+						</div>
+					</div>
+
+					<div class="form-group row">
+						<div class="col-md-2">
+							<label><i>Peak exercise ST segment</i></label>
+						</div>
+						<div class="col-md-4">
+							<select class="custom-select" id="peak_st">
+								<option value="" disabled selected>Select ...</option>
+								<option value="1"><i>(1) Unsloping</i></option>
+								<option value="2"><i>(2) Flat</i></option>
+								<option value="3"><i>(3) Downsloping</i></option>
+							</select>
+						</div>
+<br>
+<br>
+						<div class="col-md-2">
+							<label><i>Number of major vessels</i></label>
+						</div>
+						<div class="col-md-4">
+							<input class="form-control" id="c_vessel" type="text" placeholder="0 - 3">
+						</div>
+					</div>
+
+					<div class="form-group row">
+						<div class="col-md-2">
+							<label><i>Thal</i></label>
+						</div>
+						<div class="col-md-4">
+							<select class="custom-select" id="thal">
+								<option value="" disabled selected>Select ...</option>
+								<option value="3"><i>(3) Normal</i></option>
+								<option value="6"><i>(6) Fixed defect</i></option>
+								<option value="7"><i>(7) Reversable defect</i></option>
+							</select>
+						</div>
+<br>
+<br>
+<br>
+					<div class="col-md-6">
+							<a class="btn btn-success" data-toggle="modal" data-target="#lgModal" color="#33FF58" data-load-url="predict" onclick="vali()"><b>Prediction</b></a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div class="modal fade" id="lgModal" role="dialog">
+			<div class="modal-dialog modal-lg">
+				<div class="modal-content"></div>
+			</div>
+		</div>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>		
+		<script type="text/javascript" src="{{ url_for('static', filename='predict.js') }}"></script>
+		<script>
+		$('#lgModal').on('show.bs.modal', function (e) {
+			if ($('#age').val() === '' || $('#sex').val() === '') {
+				$(this).find('.modal-content').load('error');
+				return;
+			}
+			const param = predict();
+			let loadurl = $(e.relatedTarget).data('load-url');
+			$(this).find('.modal-content').load(loadurl, param);
+		})
+		</script>
+
+  </body>
+</html>
+{% endblock %}
